@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huntsman's Hollow Hunting Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1a2e1a;
+    --forest-mid: #2d4a2d;
+    --forest-light: #4a7a4a;
+    --parchment: #f2ead8;
+    --parchment-dark: #e8dcc4;
+    --parchment-deeper: #d4c49e;
+    --ink: #1c1810;
+    --ink-mid: #3a3020;
+    --gold: #8a6a20;
+    --gold-light: #b8962e;
+    --rust: #6b3a1f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--forest);
+    color: var(--ink);
+    font-family: 'Libre Baskerville', serif;
+    min-height: 100vh;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .page-wrap { position: relative; z-index: 1; }
+
+  /* HERO */
+  .hero {
+    background-color: var(--forest);
+    background-image: 
+      radial-gradient(ellipse at top, #2d4a2d 0%, #1a2e1a 60%),
+      repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.01) 30px, rgba(255,255,255,0.01) 31px);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 4px solid var(--gold);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+  }
+
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-emblem {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 28px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(138,106,32,0.08);
+    position: relative;
+  }
+
+  .hero-emblem::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(138,106,32,0.4);
+    border-radius: 50%;
+  }
+
+  .hero-emblem svg {
+    width: 52px;
+    height: 52px;
+    fill: var(--gold-light);
+  }
+
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--parchment);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .hero-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 8px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 0 auto 28px;
+    max-width: 400px;
+  }
+
+  .hero-divider span { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  .hero-divider span:last-child { background: linear-gradient(90deg, var(--gold), transparent); }
+  .hero-divider i { color: var(--gold); font-size: 14px; }
+
+  .hero-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: rgba(242,234,216,0.75);
+    letter-spacing: 1px;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--forest);
+    border-bottom: 1px solid rgba(138,106,32,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav ul {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    padding: 0 40px;
+  }
+
+  nav ul li a {
+    display: block;
+    padding: 16px 24px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--parchment-dark);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+
+  nav ul li a:hover {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold);
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    background: var(--parchment);
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, rgba(210,200,170,0.4) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8b890' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* SECTIONS */
+  section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 70px 40px;
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 0 0 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+
+  .section-body {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-mid);
+    max-width: 640px;
+  }
+
+  /* ABOUT SECTION */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .stat-card {
+    background: var(--forest);
+    color: var(--parchment);
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 8px; right: 8px; bottom: 8px;
+    border: 1px solid rgba(138,106,32,0.3);
+    pointer-events: none;
+  }
+
+  .stat-card .number {
+    font-family: 'Cinzel', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--gold-light);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .stat-card .label {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(242,234,216,0.7);
+    letter-spacing: 1px;
+  }
+
+  /* DIVIDER */
+  .ornate-divider {
+    text-align: center;
+    margin: 0;
+    padding: 0 40px;
+    color: var(--gold);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .ornate-divider::before,
+  .ornate-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--parchment-deeper));
+  }
+
+  .ornate-divider::after {
+    background: linear-gradient(90deg, var(--parchment-deeper), transparent);
+  }
+
+  .ornate-divider span {
+    padding: 0 20px;
+    color: var(--gold);
+    font-size: 16px;
+  }
+
+  /* MEMBERSHIP SECTION */
+  .membership-section {
+    background: var(--forest);
+    padding: 0;
+  }
+
+  .membership-section > section {
+    padding: 70px 40px;
+  }
+
+  .membership-section .section-label { color: var(--gold-light); }
+  .membership-section .section-label::after { background: var(--gold-light); }
+  .membership-section .section-title { color: var(--parchment); }
+  .membership-section .section-body { color: rgba(242,234,216,0.75); }
+
+  .membership-tiers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .tier-card {
+    border: 1px solid rgba(138,106,32,0.35);
+    padding: 32px 24px;
+    position: relative;
+  }
+
+  .tier-card.featured {
+    border-color: var(--gold-light);
+    background: rgba(138,106,32,0.08);
+  }
+
+  .tier-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--forest);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    padding: 4px 14px;
+    white-space: nowrap;
+  }
+
+  .tier-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+
+  .tier-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: var(--parchment);
+    margin-bottom: 20px;
+  }
+
+  .tier-price sup { font-size: 18px; vertical-align: top; margin-top: 8px; display: inline-block; }
+  .tier-price span { font-size: 14px; font-style: italic; color: rgba(242,234,216,0.5); }
+
+  .tier-features {
+    list-style: none;
+    margin-bottom: 28px;
+  }
+
+  .tier-features li {
+    font-size: 13px;
+    color: rgba(242,234,216,0.7);
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(138,106,32,0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tier-features li::before {
+    content: '✦';
+    color: var(--gold);
+    font-size: 9px;
+    flex-shrink: 0;
+  }
+
+  .tier-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .tier-btn:hover, .tier-card.featured .tier-btn {
+    background: var(--gold);
+    color: var(--forest);
+  }
+
+  /* MEMBER LOOKUP */
+  .lookup-section {
+    background: var(--parchment-dark);
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23b8962e' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    border-top: 1px solid var(--parchment-deeper);
+    border-bottom: 1px solid var(--parchment-deeper);
+  }
+
+  .lookup-box {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--parchment);
+    border: 1px solid var(--parchment-deeper);
+    border-top: 3px solid var(--gold);
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(26,46,26,0.15);
+  }
+
+  .lookup-box::before {
+    content: '';
+    position: absolute;
+    top: 12px; left: 12px; right: 12px; bottom: 12px;
+    border: 1px solid rgba(138,106,32,0.12);
+    pointer-events: none;
+  }
+
+  .lookup-title {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--forest);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .lookup-desc {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-mid);
+    text-align: center;
+    margin-bottom: 28px;
+    opacity: 0.7;
+  }
+
+  .lookup-field-wrap {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+
+  .lookup-prefix {
+    background: var(--forest);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 14px 16px;
+    border: 1px solid var(--forest);
+    border-right: none;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
+  .lookup-input {
+    flex: 1;
+    padding: 14px 16px;
+    border: 1px solid var(--parchment-deeper);
+    border-left: none;
+    background: white;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 16px;
+    color: var(--ink);
+    letter-spacing: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .lookup-input:focus { border-color: var(--gold); }
+  .lookup-input::placeholder { color: rgba(60,48,32,0.3); letter-spacing: 1px; font-size: 14px; }
+
+  .lookup-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--forest);
+    border: 1px solid var(--forest);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .lookup-btn:hover { background: var(--forest-mid); }
+
+  /* RESULT CARD */
+  .member-result {
+    display: none;
+    margin-top: 28px;
+    border: 1px solid var(--gold);
+    background: var(--parchment);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .member-result.visible { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .result-header {
+    background: var(--forest);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .result-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(138,106,32,0.2);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold-light);
+    flex-shrink: 0;
+  }
+
+  .result-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--parchment);
+    margin-bottom: 3px;
+  }
+
+  .result-id-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold-light);
+  }
+
+  .result-status {
+    margin-left: auto;
+    background: rgba(74,122,74,0.25);
+    border: 1px solid rgba(74,122,74,0.6);
+    color: #6dbb6d;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    padding: 6px 12px;
+    text-transform: uppercase;
+  }
+
+  .result-body {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .result-field {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--parchment-deeper);
+  }
+
+  .result-field-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .result-field-value {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .result-field-value.sub {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-mid);
+  }
+
+  .result-seal {
+    text-align: center;
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--parchment-deeper);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .result-seal::before,
+  .result-seal::after {
+    content: '✦';
+    font-size: 8px;
+  }
+
+  /* ERROR */
+  .lookup-error {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-left: 3px solid var(--rust);
+    background: rgba(107,58,31,0.06);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--rust);
+  }
+
+  .lookup-error.visible { display: block; animation: fadeIn 0.3s ease; }
+
+  /* NEWS SECTION */
+  .news-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    margin-top: 40px;
+  }
+
+  .news-main {
+    border-top: 3px solid var(--forest);
+    padding-top: 20px;
+  }
+
+  .news-main-date {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .news-main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  .news-main-excerpt {
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--ink-mid);
+    margin-bottom: 16px;
+  }
+
+  .news-read-more {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px;
+    text-transform: uppercase;
+  }
+
+  .news-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 1px solid var(--parchment-deeper);
+    padding-left: 32px;
+  }
+
+  .news-item {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--parchment-deeper);
+  }
+
+  .news-item:last-child { border-bottom: none; }
+
+  .news-item-date {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 5px;
+  }
+
+  .news-item-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--forest);
+    line-height: 1.4;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(242,234,216,0.5);
+    text-align: center;
+    padding: 48px 40px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    border-top: 3px solid var(--gold);
+  }
+
+  footer .footer-logo {
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+  }
+
+  footer .footer-copy {
+    opacity: 0.45;
+    margin-top: 12px;
+    font-size: 9px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 680px) {
+    .hero-title { font-size: 28px; }
+    .about-grid, .membership-tiers, .news-grid { grid-template-columns: 1fr; }
+    .news-sidebar { border-left: none; padding-left: 0; border-top: 1px solid var(--parchment-deeper); padding-top: 24px; }
+    .result-body { grid-template-columns: 1fr; }
+    nav ul { flex-wrap: wrap; }
+    nav ul li a { padding: 12px 14px; font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-emblem">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 4 C28 4 24 8 22 12 L18 10 L20 16 C16 16 12 20 12 24 C12 28 14 31 18 33 L16 38 L22 36 C24 40 28 44 32 44 C36 44 40 40 42 36 L48 38 L46 33 C50 31 52 28 52 24 C52 20 48 16 44 16 L46 10 L42 12 C40 8 36 4 32 4 Z M32 8 C35 8 38 11 39 14 L42 12 L41 17 C44 17 48 20 48 24 C48 27 46 29 43 30 L44 35 L40 33 C38 37 35 40 32 40 C29 40 26 37 24 33 L20 35 L21 30 C18 29 16 27 16 24 C16 20 20 17 23 17 L22 12 L25 14 C26 11 29 8 32 8 Z" opacity="0.9"/>
+        <circle cx="32" cy="24" r="6" opacity="0.7"/>
+        <path d="M26 48 L28 58 L32 56 L36 58 L38 48 Z" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="hero-title">HUNTSMAN'S HOLLOW</div>
+    <div class="hero-sub">Hunting Club · Est. 1947</div>
+    <div class="hero-divider">
+      <span></span>
+      <i>✦</i>
+      <span></span>
+    </div>
+    <div class="hero-tagline">"Where the Wild Meets the Worthy"</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><a href="#">The Club</a></li>
+    <li><a href="#">The Grounds</a></li>
+    <li><a href="#">Membership</a></li>
+    <li><a href="#">Season Calendar</a></li>
+    <li><a href="#">Lodge & Lodging</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ABOUT -->
+<div class="main">
+<section>
+  <div class="section-label">Our Legacy</div>
+  <h2 class="section-title">A Brotherhood of the Hunt</h2>
+  <p class="section-body">
+    Nestled deep within the ancient oak and pine of the Ashfield Valley, Huntsman's Hollow has stood as a sanctuary for the discerning hunter since 1947. Founded by twelve men who believed that true sport demands not just skill, but reverence — for land, for quarry, and for tradition — our club remains a place apart from the modern world.
+  </p>
+  <p class="section-body" style="margin-top: 16px;">
+    Our grounds span over 4,200 acres of managed wilderness, including three private lakes, eleven miles of river frontage, and some of the most productive upland bird habitat in the region. Whether pursuing whitetail, wild turkey, or the elusive ruffed grouse, our members find no finer ground.
+  </p>
+
+  <div class="about-grid">
+    <div class="stat-card">
+      <span class="number">4,200</span>
+      <span class="label">Acres of Private Grounds</span>
+    </div>
+    <div class="stat-card">
+      <span class="number">77</span>
+      <span class="label">Years of Unbroken Tradition</span>
+    </div>
+    <div class="stat-card">
+      <span class="number">318</span>
+      <span class="label">Active Members</span>
+    </div>
+  </div>
+</section>
+
+<div class="ornate-divider"><span>✦</span></div>
+
+<!-- NEWS -->
+<section>
+  <div class="section-label">Club Bulletin</div>
+  <h2 class="section-title">Latest from the Hollow</h2>
+  <div class="news-grid">
+    <div class="news-main">
+      <div class="news-main-date">October 2024 · Grounds Report</div>
+      <div class="news-main-title">Whitetail Population Reaches Record High After Three-Year Conservation Effort</div>
+      <div class="news-main-excerpt">
+        Following a rigorous three-year habitat management programme overseen by Head Warden Dale Pruitt, camera trap surveys now confirm over 340 individual whitetail deer on our managed grounds — the highest population recorded in the club's history. The new food plot rotations along the eastern ridgeline have proven particularly effective, with velvet bucks consistently photographed in numbers not seen since the 1980s.
+      </div>
+      <a href="#" class="news-read-more">Read Full Report</a>
+    </div>
+    <div class="news-sidebar">
+      <div class="news-item">
+        <div class="news-item-date">Sept 2024</div>
+        <div class="news-item-title">Fall Turkey Season Dates Announced</div>
+      </div>
+      <div class="news-item">
+        <div class="news-item-date">Aug 2024</div>
+        <div class="news-item-title">Lodge Restoration Complete — Bookings Now Open</div>
+      </div>
+      <div class="news-item">
+        <div class="news-item-date">July 2024</div>
+        <div class="news-item-title">Annual Shooting Competition Results</div>
+      </div>
+      <div class="news-item">
+        <div class="news-item-date">June 2024</div>
+        <div class="news-item-title">New Trail System Opens in Northern Sector</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornate-divider"><span>✦</span></div>
+</div>
+
+<!-- MEMBERSHIP TIERS -->
+<div class="membership-section">
+  <section>
+    <div class="section-label">Join the Hollow</div>
+    <h2 class="section-title">Membership & Access</h2>
+    <p class="section-body">
+      Membership at Huntsman's Hollow is extended by invitation or application. All prospective members are reviewed by the membership committee, with priority given to those who demonstrate not only skill, but a genuine respect for conservation and the traditions of the hunt.
+    </p>
+
+    <div class="membership-tiers">
+      <div class="tier-card">
+        <div class="tier-name">Associate</div>
+        <div class="tier-price"><sup>$</sup>1,200<span>/year</span></div>
+        <ul class="tier-features">
+          <li>Weekday grounds access</li>
+          <li>Upland bird season only</li>
+          <li>Lodge day use included</li>
+          <li>Guest privileges (2/year)</li>
+        </ul>
+        <a href="#" class="tier-btn">Apply Now</a>
+      </div>
+      <div class="tier-card featured">
+        <div class="tier-badge">Most Popular</div>
+        <div class="tier-name">Full Member</div>
+        <div class="tier-price"><sup>$</sup>3,600<span>/year</span></div>
+        <ul class="tier-features">
+          <li>All-season full access</li>
+          <li>Deer, turkey & upland</li>
+          <li>Overnight lodge stays</li>
+          <li>Guest privileges (6/year)</li>
+          <li>Private blind allocation</li>
+        </ul>
+        <a href="#" class="tier-btn">Apply Now</a>
+      </div>
+      <div class="tier-card">
+        <div class="tier-name">Patron</div>
+        <div class="tier-price"><sup>$</sup>8,500<span>/year</span></div>
+        <ul class="tier-features">
+          <li>Unrestricted grounds access</li>
+          <li>Dedicated guide service</li>
+          <li>Private cabin reservation</li>
+          <li>Unlimited guest privileges</li>
+          <li>Membership Committee vote</li>
+        </ul>
+        <a href="#" class="tier-btn">Apply Now</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MEMBER LOOKUP -->
+<div class="lookup-section">
+  <section>
+    <div class="section-label">Member Portal</div>
+    <h2 class="section-title">Member Verification</h2>
+    <p class="section-body" style="margin-bottom: 40px;">
+      Current members may verify their standing and access card status using the lookup tool below. Staff at the gatehouse and lodge use this system to confirm valid membership.
+    </p>
+
+    <div class="lookup-box">
+      <div class="lookup-title">MEMBER LOOKUP</div>
+      <div class="lookup-desc">Enter your Member ID to retrieve your record</div>
+
+      <div class="lookup-field-wrap">
+        <div class="lookup-prefix">ID</div>
+        <input class="lookup-input" id="memberInput" type="text" placeholder="" maxlength="12" autocomplete="off" spellcheck="false">
+      </div>
+      <button class="lookup-btn" id="lookupBtn" onclick="lookupMember()">VERIFY MEMBERSHIP</button>
+
+      <div class="lookup-error" id="lookupError">
+        No member found matching that ID. Please check your card and try again, or contact the clubhouse at extension 14.
+      </div>
+
+      <div class="member-result" id="memberResult">
+        <div class="result-header">
+          <div class="result-avatar" id="resultAvatar">EN</div>
+          <div>
+            <div class="result-name" id="resultName">Ezra Nightbourne</div>
+            <div class="result-id-badge" id="resultId">HH-72458</div>
+          </div>
+          <div class="result-status">✦ Active</div>
+        </div>
+        <div class="result-body">
+          <div class="result-field">
+            <div class="result-field-label">Full Name</div>
+            <div class="result-field-value" id="rName">Ezra Nightbourne</div>
+          </div>
+          <div class="result-field">
+            <div class="result-field-label">Member ID</div>
+            <div class="result-field-value" id="rId">HH-72458</div>
+          </div>
+          <div class="result-field">
+            <div class="result-field-label">Membership Tier</div>
+            <div class="result-field-value" id="rTier">Full Member</div>
+          </div>
+          <div class="result-field">
+            <div class="result-field-label">Member Since</div>
+            <div class="result-field-value" id="rSince">2022</div>
+          </div>
+          <div class="result-field">
+            <div class="result-field-label">Status</div>
+            <div class="result-field-value" style="color:#4a7a4a;" id="rStatus">Active — In Good Standing</div>
+          </div>
+          <div class="result-field">
+            <div class="result-field-label">Access Level</div>
+            <div class="result-field-value" id="rAccess">All-Season Full Access</div>
+          </div>
+          <div class="result-field" style="grid-column: 1/-1; border-bottom: none;">
+            <div class="result-field-label">Hunting Privileges</div>
+            <div class="result-field-value sub" id="rPriv">Whitetail Deer · Wild Turkey · Upland Bird · Private Blind Allocation</div>
+          </div>
+        </div>
+        <div class="result-seal">Verified by Huntsman's Hollow Hunting Club</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">HUNTSMAN'S HOLLOW</div>
+  <div>Hunting Club · Ashfield Valley · Est. 1947</div>
+  <div class="footer-copy">© 2024 Huntsman's Hollow Hunting Club · All Rights Reserved · Membership by Invitation</div>
+</footer>
+
+</div><!-- page-wrap -->
+
+<script>
+const MEMBERS = {
+  'HH-72458': {
+    name: 'Ezra Nightbourne',
+    initials: 'EN',
+    tier: 'Full Member',
+    since: '2022',
+    status: 'Active — In Good Standing',
+    access: 'All-Season Full Access',
+    privileges: 'Whitetail Deer · Wild Turkey · Upland Bird · Private Blind Allocation'
+  }
+};
+
+function lookupMember() {
+  const raw = document.getElementById('memberInput').value.trim().toUpperCase();
+  const input = raw.startsWith('HH-') ? raw : 'HH-' + raw.replace(/[^0-9]/g, '');
+  
+  const resultEl = document.getElementById('memberResult');
+  const errorEl = document.getElementById('lookupError');
+
+  resultEl.classList.remove('visible');
+  errorEl.classList.remove('visible');
+
+  const member = MEMBERS[input] || MEMBERS[raw];
+
+  if (member) {
+    document.getElementById('resultAvatar').textContent = member.initials;
+    document.getElementById('resultName').textContent = member.name;
+    document.getElementById('resultId').textContent = input in MEMBERS ? input : raw;
+    document.getElementById('rName').textContent = member.name;
+    document.getElementById('rId').textContent = input in MEMBERS ? input : raw;
+    document.getElementById('rTier').textContent = member.tier;
+    document.getElementById('rSince').textContent = member.since;
+    document.getElementById('rStatus').textContent = member.status;
+    document.getElementById('rAccess').textContent = member.access;
+    document.getElementById('rPriv').textContent = member.privileges;
+    setTimeout(() => resultEl.classList.add('visible'), 50);
+  } else {
+    setTimeout(() => errorEl.classList.add('visible'), 50);
+  }
+}
+
+document.getElementById('memberInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') lookupMember();
+});
+</script>
+</body>
+</html>
